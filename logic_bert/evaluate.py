@@ -43,7 +43,6 @@ class LogicDataset(Dataset):
 
     @classmethod
     def initialze_from_file(cls, file):
-        # Since data_file was not initialized in init() method the file is now Nonetype
         if "," in file:
             files = file.split(",")
         else:
@@ -61,7 +60,7 @@ def init():
 
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--data_file', type=str) # Why don't we set the datafile? Now its type is None.
+    parser.add_argument('--data_file', type=str)
     parser.add_argument('--vocab_file', type=str, default='vocab.txt')
     parser.add_argument('--device', default='cuda', type=str)
     parser.add_argument('--cuda_core', default='0', type=str)
@@ -71,10 +70,6 @@ def init():
     device = args.device
     os.environ["CUDA_VISIBLE_DEVICES"] = args.cuda_core
 
-    #print(vars(args))
-    # {'data_file': None, 'vocab_file': 'vocab.txt', 'device': 'cuda', 'cuda_core': '0'}
-
-    # We are returning an argparse.Namespace object where the data_file is None. How come?
     return args
 
 
@@ -124,6 +119,7 @@ def tokenize_and_embed(sentence, word_emb, position_emb):
 
 
 def main():
+    print("Evaluate.py is running")
     args = init()
 
     # args is a argparse.Namespace object with data_file=None. Where does the data_file get set?
@@ -138,7 +134,8 @@ def main():
 
     correct_counter = 0
 
-    for index in tqdm(range(len(val_dataset))):        
+    for index in tqdm(range(len(val_dataset))):
+        print(f"Running on index {index}")        
         text, label, depth = val_dataset[index]
 
         # skip examples of depth > 10
